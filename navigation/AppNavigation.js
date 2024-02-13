@@ -3,15 +3,15 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import EditScreen from "../screens/EditScreen";
-import FeedScreen from "../screens/FeedScreen";
 import AccountScreen from "../screens/AccountScreen";
+import PostStackNavigator from "./PostStackNavigator";
 const Tab = createBottomTabNavigator();
 
 const AppNavigator = () => (
   <Tab.Navigator>
     <Tab.Screen
       name="Feed"
-      component={FeedScreen}
+      component={PostStackNavigator}
       options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons name="home" color={color} size={size} />

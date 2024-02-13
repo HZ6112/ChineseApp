@@ -5,6 +5,7 @@ import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { User, onAuthStateChanged } from "firebase/auth";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import AuthNavigator from "./navigation/AuthNavigation";
 import AppNavigator from "./navigation/AppNavigation";
 
@@ -46,6 +47,8 @@ export default function App() {
   }, []);
 
   return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+
     <NavigationContainer>
         {user ? (
           <AppNavigator />
@@ -53,6 +56,7 @@ export default function App() {
           <AuthNavigator />
         )}
     </NavigationContainer>
+    </GestureHandlerRootView>
   );
 }
 
