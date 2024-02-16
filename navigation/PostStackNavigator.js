@@ -7,8 +7,8 @@ const PostStack = createStackNavigator();
 
 function PostStackNavigator() {
   return (
-    <PostStack.Navigator>
-      <PostStack.Screen name="FeedScreen" component={FeedScreen} options={{ headerTitle: "FeedScreen" }} />
+    <PostStack.Navigator >
+      <PostStack.Screen name="FeedScreen" component={FeedScreen} options={{headerShown: false }} />
       <PostStack.Screen name="Details" component={DetailsScreen} options={{ headerTitle: "Details" }} />
     </PostStack.Navigator>
   );
