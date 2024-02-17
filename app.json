@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "CMA",
-    "slug": "CMA",
+    "slug": "chineseapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -15,7 +15,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.chineseapp.chineseapp"
     },
     "android": {
       "adaptiveIcon": {
@@ -25,6 +26,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "7bed94c8-e710-4647-9162-7f64d0a355ac"
+      }
+    },
+    "owner": "chineseapp"
   }
 }
