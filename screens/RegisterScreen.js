@@ -1,53 +1,44 @@
-import React, { useState } from "react";
-import { Alert, StyleSheet } from "react-native";
+import React, { useState, useEffect, useCallback } from "react";
+import { ActivityIndicator, Alert, StyleSheet } from "react-native";
 import * as Yup from "yup";
-import { ref, set, child, getDatabase } from "firebase/database";
+import { useDispatch, useSelector } from "react-redux";
+import colors from "../config/colors";
 
 import Screen from "../components/Screen";
 import { Form, FormField, SubmitButton } from "../components/forms";
 import { Firebase_auth } from "../firebase";
-import { ErrorMessage } from "../components/forms";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { Register } from "../utils/authAction";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().label("Name"),
   email: Yup.string().required().email().label("Email"),
   password: Yup.string().required().min(4).label("Password"),
 });
-const createUser = async (name, email, userId) => {
-  const userData = {
-    name,
-    email,
-    userId,
-    signUpDate: new Date().toISOString(),
-  };
-  const dbRef = ref(getDatabase());
-  const childRef = child(dbRef, `users/${userId}`);
-  await set(childRef, userData);
-  return userData;
-};
 
 function RegisterScreen() {
+  const dispatch = useDispatch();
   const auth = Firebase_auth;
   const [error, setError] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async ({ name, email, password }) => {
-    try {
-      const response = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      const { uid } = response.user;
-      const user = await createUser(name, email, uid);
-      console.log(user);
-    } catch (error) {
-      console.log(error);
-      Alert.alert(error.code);
-      setError(error.code);
+  useEffect(() => {
+    if (error) {
+      Alert.alert("An error occured", error, [{ text: "Okay" }]);
     }
-    resetForm();
-  };
+  }, [error]);
+  const handleSubmit = useCallback(
+    async ({ name, email, password }) => {
+      try {
+        setIsLoading(true);
+        const action = Register(name, email, password);
+        await dispatch(action);
+      } catch (error) {
+        setError(error.message);
+        setIsLoading(false);
+      }
+    },
+    [dispatch]
+  );
 
   return (
     <Screen style={styles.container}>
@@ -80,7 +71,15 @@ function RegisterScreen() {
           secureTextEntry
           textContentType="password"
         />
-        <SubmitButton title="Register" />
+        {isLoading ? (
+          <ActivityIndicator
+            size={"small"}
+            color={colors.primary}
+            style={{ marginTop: 10 }}
+          />
+        ) : (
+          <SubmitButton title="Register" />
+        )}
       </Form>
     </Screen>
   );

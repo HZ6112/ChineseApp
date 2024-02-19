@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { StyleSheet, Image } from "react-native";
 import * as Yup from "yup";
 import { Firebase_auth } from "../firebase";
@@ -9,8 +9,10 @@ import {
   SubmitButton,
   ErrorMessage,
 } from "../components/forms";
-
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signIn } from "../utils/authAction";
+import { Alert, ActivityIndicator } from "react-native";
+import { useDispatch } from "react-redux";
+import colors from "../config/colors";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -18,17 +20,28 @@ const validationSchema = Yup.object().shape({
 });
 
 function LoginScreen(props) {
+  const dispatch = useDispatch();
+  const [error, setError] = useState();
+  const [isLoading, setIsLoading] = useState(false);
   const auth = Firebase_auth;
-  const [loginFailed, setLoginFailed] = useState(false);
-  const handleSubmit = async ({ email, password }) => {
-    try {
-      const response = await signInWithEmailAndPassword(auth, email, password);
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-      setLoginFailed(true);
+  useEffect(() => {
+    if (error) {
+      Alert.alert("An error occured", error, [{ text: "Okay" }]);
     }
-  };
+  }, [error]);
+  const handleSubmit = useCallback(
+    async ({ email, password }) => {
+      try {
+        setIsLoading(true);
+        const action = signIn(email, password);
+        await dispatch(action);
+      } catch (error) {
+        setError(error.message);
+        setIsLoading(false);
+      }
+    },
+    [dispatch]
+  );
 
   return (
     <Screen style={styles.container}>
@@ -39,10 +52,6 @@ function LoginScreen(props) {
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
       >
-        <ErrorMessage
-          error="Invalid email and/or password"
-          visible={loginFailed}
-        />
         <FormField
           autoCapitalize="none"
           autoCorrect={false}
@@ -61,7 +70,15 @@ function LoginScreen(props) {
           secureTextEntry
           textContentType="password"
         />
-        <SubmitButton title="Login" />
+        {isLoading ? (
+          <ActivityIndicator
+            size={"small"}
+            color={colors.primary}
+            style={{ marginTop: 10 }}
+          />
+        ) : (
+          <SubmitButton title="Login" />
+        )}
       </Form>
     </Screen>
   );
