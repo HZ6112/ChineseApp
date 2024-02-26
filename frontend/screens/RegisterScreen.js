@@ -1,12 +1,13 @@
-import React, { useState } from "react";
-import { Alert, StyleSheet } from "react-native";
+import React, { useState, useEffect, useCallback } from "react";
+import { ActivityIndicator, Alert, StyleSheet } from "react-native";
 import * as Yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import colors from "../config/colors";
 
 import Screen from "../components/Screen";
 import { Form, FormField, SubmitButton } from "../components/forms";
 import { Firebase_auth } from "../firebase";
-import { ErrorMessage } from "../components/forms";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { Register } from "../utils/authAction";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().label("Name"),
@@ -15,23 +16,29 @@ const validationSchema = Yup.object().shape({
 });
 
 function RegisterScreen() {
+  const dispatch = useDispatch();
   const auth = Firebase_auth;
   const [error, setError] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async ({ email, password }) => {
-    try {
-      const response = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-      Alert.alert(error);
-      setError(error);
+  useEffect(() => {
+    if (error) {
+      Alert.alert("An error occured", error, [{ text: "Okay" }]);
     }
-  };
+  }, [error]);
+  const handleSubmit = useCallback(
+    async ({ name, email, password }) => {
+      try {
+        setIsLoading(true);
+        const action = Register(name, email, password);
+        await dispatch(action);
+      } catch (error) {
+        setError(error.message);
+        setIsLoading(false);
+      }
+    },
+    [dispatch]
+  );
 
   return (
     <Screen style={styles.container}>
@@ -40,7 +47,6 @@ function RegisterScreen() {
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
       >
-        <ErrorMessage error={error} visible={error} />
         <FormField
           autoCorrect={false}
           icon="account"
@@ -65,7 +71,15 @@ function RegisterScreen() {
           secureTextEntry
           textContentType="password"
         />
-        <SubmitButton title="Register" />
+        {isLoading ? (
+          <ActivityIndicator
+            size={"small"}
+            color={colors.primary}
+            style={{ marginTop: 10 }}
+          />
+        ) : (
+          <SubmitButton title="Register" />
+        )}
       </Form>
     </Screen>
   );

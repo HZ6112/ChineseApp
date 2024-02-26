@@ -4,7 +4,8 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import EditScreen from "../screens/EditScreen";
 import FeedScreen from "../screens/FeedScreen";
-import AccountScreen from "../screens/AccountScreen";
+import AccountNavigation from "./AccountNavigation";
+
 const Tab = createBottomTabNavigator();
 
 const AppNavigator = () => (
@@ -32,12 +33,13 @@ const AppNavigator = () => (
       }}
     />
     <Tab.Screen
-      name="Account"
-      component={AccountScreen}
+      name="Account Page"
+      component={AccountNavigation}
       options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons name="account" color={color} size={size} />
         ),
+        headerShown: false,
       }}
     />
   </Tab.Navigator>
