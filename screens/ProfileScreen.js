@@ -1,11 +1,7 @@
 import React, { useState, useCallback } from "react";
-import {
-  View,
-  StyleSheet,
-  ActivityIndicator,
-  Text,
-  ScrollView,
-} from "react-native";
+import { View, StyleSheet, Text, ScrollView } from "react-native";
+import ActivityIndicator from "../components/ActivityIndicator";
+
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import { Form, FormField, SubmitButton } from "../components/forms";

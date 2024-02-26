@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import {
   View,
-  ActivityIndicator,
   FlatList,
   Text,
   StyleSheet,
   Button,
   TextInput,
 } from "react-native";
+import ActivityIndicator from "../components/ActivityIndicator";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import CustomHeaderButton from "../components/CustomHeaderButton";
 import { FontAwesome } from "@expo/vector-icons";
