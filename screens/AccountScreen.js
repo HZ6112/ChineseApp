@@ -21,7 +21,7 @@ function AccountScreen({ navigation }) {
       <ListItem
         title={userData.name}
         subTitle={userData.email}
-        image={{ uri: image } || defaultImage}
+        image={image ? { uri: image } : defaultImage}
         onPress={() => navigation.navigate("Profile")}
       />
       <View style={styles.textContainer}>

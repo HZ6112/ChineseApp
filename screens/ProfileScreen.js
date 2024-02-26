@@ -59,6 +59,7 @@ function ProfileScreen(props) {
           fontSize={20}
           userId={userData.userId}
           uri={userData.profilePicture}
+          showEditButton={true}
         />
         <Form
           initialValues={{ name: Iname, email: Iemail, about: Iabout }}
