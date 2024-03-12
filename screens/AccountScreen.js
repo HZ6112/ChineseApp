@@ -14,7 +14,7 @@ function AccountScreen({ navigation }) {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.auth.userData);
   const defaultImage = require("../assets/userImage.jpg");
-  const image = userData.profilePicture;
+  const image = userData.profilePicture || defaultImage;
 
   return (
     <Screen style={styles.container}>

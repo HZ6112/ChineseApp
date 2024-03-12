@@ -17,6 +17,27 @@ const MessageScreen = (props) => {
     });
   }, [chatsData]);
   useEffect(() => {
+    if (!selectedUser) {
+      return;
+    }
+    let ChatAlreadyExists = userChats.find(
+      (chats) =>
+        chats.users.find((uid) => uid === selectedUser) &&
+        chats.users.find((uid) => uid === userData.userId)
+    );
+    if (ChatAlreadyExists) {
+      let chatId = ChatAlreadyExists.key;
+      props.navigation.navigate("Chat", { chatId });
+    } else {
+      const chatUsers = [selectedUser, userData.userId];
+      const navigationProps = {
+        newChatData: { users: chatUsers },
+      };
+      props.navigation.navigate("Chat", navigationProps);
+    }
+  }, [props.route?.params]);
+
+  useEffect(() => {
     props.navigation.setOptions({
       headerRight: () => {
         return (
@@ -33,16 +54,7 @@ const MessageScreen = (props) => {
       },
     });
   }, []);
-  useEffect(() => {
-    if (!selectedUser) {
-      return;
-    }
-    const chatUsers = [selectedUser, userData.userId];
-    const navigationProps = {
-      newChatData: { users: chatUsers },
-    };
-    props.navigation.navigate("Chat", navigationProps);
-  }, [props.route?.params]);
+
   return (
     <Screen>
       <Text
