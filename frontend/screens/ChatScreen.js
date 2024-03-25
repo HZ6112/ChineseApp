@@ -66,8 +66,9 @@ const ChatScreen = (props) => {
         //No Chat ID, create the chat
         id = await createChat(userData.userId, props.route.params.newChatData);
         setChatId(id);
+        console.log(chatId);
       }
-      await sendTextMessage(chatId, userData.userId, messageText);
+      await sendTextMessage(id, userData.userId, messageText);
       setMessageText("");
     } catch (error) {
       console.log(error);
