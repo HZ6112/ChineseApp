@@ -14,11 +14,11 @@ const PostImagePicker = (props) => {
             const tempUri = await launchImagePicker([1,2]);
             if (!tempUri) return;
             setIsLoading(true);
-            const uploadUrl = await uploadImageAsync(tempUri);
-            setIsLoading(false);
-            if (!uploadUrl) {
-                throw new Error("could not upload image");
-            }
+            // const uploadUrl = await uploadImageAsync(tempUri);
+            // setIsLoading(false);
+            // if (!uploadUrl) {
+            //     throw new Error("could not upload image");
+            // }
             setImage({ uri: uploadUrl });
             } catch (error) {
             console.log(error);
