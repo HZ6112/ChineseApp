@@ -9,12 +9,12 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 
-export const launchImagePicker = async () => {
+export const launchImagePicker = async (aspectRatio = [1, 1]) => {
   await checkMediaPermissons();
   const result = await ImagePicker.launchImageLibraryAsync({
     mediaTypes: ImagePicker.MediaTypeOptions.Images,
     allowsEditing: true,
-    aspect: [1, 1],
+    aspect: aspectRatio,
     quality: 1,
   });
   if (!result.canceled) {
