@@ -12,7 +12,7 @@ const PostImagePicker = (props) => {
         {
             const tempUri = await launchImagePicker([1,2]);
             if (!tempUri) return;
-            setImage({ uri: uploadUrl });
+            setImage({ uri: tempUri });
         } catch (error) {
             console.log(error);
         }
