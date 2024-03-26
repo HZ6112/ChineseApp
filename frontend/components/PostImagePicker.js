@@ -35,7 +35,6 @@ const styles = StyleSheet.create({
     },
     imagePicker:{
         backgroundColor: 'powderblue',
-        flex: 2,
         justifyContent: "center",
         alignItems: "center"
     }
